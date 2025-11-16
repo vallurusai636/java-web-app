@@ -22,16 +22,20 @@ pipeline {
 
         stage('Docker Build & Push') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds',
-                                                  passwordVariable: 'DOCKER_PASS',
-                                                  usernameVariable: 'DOCKER_USER')]) {
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'dockerhub-creds',
+                        passwordVariable: 'DOCKER_PASS',
+                        usernameVariable: 'DOCKER_USER'
+                    )
+                ]) {
 
                     sh '''
                         echo "🐳 Building Docker image..."
                         docker build -t $DOCKER_IMAGE:$BUILD_NUMBER .
 
                         echo "🔐 Logging into DockerHub..."
-                        echo $PWD | docker login -u $USER --password-stdin
+                        echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
 
                         echo "🏷️ Tagging image as latest..."
                         docker tag $DOCKER_IMAGE:$BUILD_NUMBER $DOCKER_IMAGE:latest
