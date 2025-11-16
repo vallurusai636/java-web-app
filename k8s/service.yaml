@@ -3,9 +3,10 @@ kind: Service
 metadata:
   name: java-web-app-service
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   selector:
     app: java-web-app
   ports:
-    - port: 80
-      targetPort: 8080
+  - port: 80
+    targetPort: 8080
+
