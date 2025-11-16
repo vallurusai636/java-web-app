@@ -3,7 +3,8 @@ pipeline {
   }
   stages {
     stage('Checkout') {
-      steps { checkout scm }
+      steps { 
+        git branch: 'main', url: 'https://github.com/vallurusai636/java-web-app.git'
     }
     stage('Build') {
       steps {
