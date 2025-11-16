@@ -22,7 +22,7 @@ pipeline {
 
         stage('Docker Build & Push') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds',
+                withCredentials([usernamePassword(credentialsId: 'dockerhub',
                                                   passwordVariable: 'PWD',
                                                   usernameVariable: 'USER')]) {
 
