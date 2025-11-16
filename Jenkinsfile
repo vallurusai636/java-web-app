@@ -51,5 +51,34 @@ pipeline {
                 }
             }
         }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                echo "🚀 Deploying application to Kubernetes..."
+
+                // Use kubeconfig stored in Jenkins credentials
+                withCredentials([file(credentialsId: 'eks-kubeconfig', variable: 'KUBECONFIG_FILE')]) {
+
+                    sh '''
+                        export KUBECONFIG=$KUBECONFIG_FILE
+
+                        echo "📌 Applying Deployment YAML..."
+                        kubectl apply -f deployment.yaml
+
+                        echo "📌 Applying Service YAML..."
+                        kubectl apply -f service.yaml
+
+                        echo "🔄 Updating Deployment image..."
+                        kubectl set image deployment/java-web-app \
+                        java-web-app=$DOCKER_IMAGE:$BUILD_NUMBER --record
+
+                        echo "⏳ Waiting for rollout to finish..."
+                        kubectl rollout status deployment/java-web-app
+
+                        echo "🎉 Deployment to Kubernetes completed!"
+                    '''
+                }
+            }
+        }
     }
 }
