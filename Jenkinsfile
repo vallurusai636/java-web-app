@@ -22,9 +22,9 @@ pipeline {
 
         stage('Docker Build & Push') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub',
-                                                  passwordVariable: 'PWD',
-                                                  usernameVariable: 'USER')]) {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds',
+                                                  passwordVariable: 'DOCKER_PASS',
+                                                  usernameVariable: 'DOCKER_USER')]) {
 
                     sh '''
                         echo "🐳 Building Docker image..."
